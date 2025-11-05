@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Layout, Menu, Typography, Card, Table, Button, Modal, Form, Input, message, Select } from 'antd';
 import { PlusOutlined, EditOutlined, DeleteOutlined, LogoutOutlined, TableOutlined } from '@ant-design/icons';
-import axios from 'axios';
+import apiClient from '../utils/axios';
 import { useNavigate } from 'react-router-dom';
 
 // 表格基本样式设置
@@ -76,31 +76,28 @@ const AdminPage = () => {
   }, []); // 只在组件挂载时执行一次
   
   // 获取人员数据
-  const fetchPersons = async () => {
+  const fetchPersons = async (page = paginationConfig.current, pageSize = paginationConfig.pageSize) => {
     setLoading(true);
     try {
-      const token = localStorage.getItem('token');
-      const response = await axios.get('http://localhost:5001/api/persons', {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        },
+      const response = await apiClient.get('/persons', {
         params: {
-          page: paginationConfig.current,
-          pageSize: paginationConfig.pageSize
+          page,
+          pageSize
         }
       });
       
       setPersons(response.data.persons);
       setPaginationConfig(prev => ({
         ...prev,
+        current: page,
+        pageSize: pageSize,
         total: response.data.total
       }));
     } catch (error) {
       console.error('获取人员数据失败:', error);
-      message.error('获取数据失败，请检查网络连接或登录状态');
-      // 如果是认证错误，跳转到登录页面
-      if (error.response && error.response.status === 401) {
-        handleLogout();
+      // 401 错误会在 axios 拦截器中处理，这里不需要重复处理
+      if (error.response && error.response.status !== 401) {
+        message.error('获取数据失败，请检查网络连接');
       }
     } finally {
       setLoading(false);
@@ -108,16 +105,9 @@ const AdminPage = () => {
   };
 
   // 分页处理函数
-  const handlePageChange = (pagination) => {
-    // 更新分页配置
-    setPaginationConfig(prev => ({
-      ...prev,
-      current: pagination.current,
-      pageSize: pagination.pageSize
-    }));
-    
-    // 调用fetchPersons获取新页面数据
-    fetchPersons();
+  const handlePageChange = (page, pageSize) => {
+    // 调用fetchPersons获取新页面数据，传递正确的分页参数
+    fetchPersons(page, pageSize);
   };
 
   // 打开添加/编辑模态框
@@ -161,86 +151,61 @@ const AdminPage = () => {
   // 提交表单
   const handleSubmit = async (values) => {
     try {
-      const token = localStorage.getItem('token');
-      
       if (isEditMode) {
         // 编辑模式：调用后端更新API
-        const response = await axios.put(`http://localhost:5001/api/persons/${currentEditingId}`, values, {
-          headers: {
-            'Authorization': `Bearer ${token}`
-          }
-        });
-        
+        await apiClient.put(`/persons/${currentEditingId}`, values);
         message.success('更新成功');
       } else {
         // 新增模式：调用后端创建API
-        const response = await axios.post('http://localhost:5001/api/persons', values, {
-          headers: {
-            'Authorization': `Bearer ${token}`
-          }
-        });
-        
+        await apiClient.post('/persons', values);
         message.success('添加成功');
       }
 
       setIsModalVisible(false);
       form.resetFields();
       setSelectedProvince(null);
-      fetchPersons(); // 更新数据列表
+      // 更新数据列表，使用当前分页配置
+      fetchPersons(paginationConfig.current, paginationConfig.pageSize);
     } catch (error) {
       console.error('操作失败:', error);
-      message.error(isEditMode ? '更新失败' : '添加失败');
-      // 如果是认证错误，跳转到登录页面
-      if (error.response && error.response.status === 401) {
-        handleLogout();
+      if (error.response && error.response.status !== 401) {
+        message.error(isEditMode ? '更新失败' : '添加失败');
       }
+      // 401 错误会在 axios 拦截器中处理
     }
   };
 
   // 删除单个人员
   const deletePerson = async (id) => {
     try {
-      const token = localStorage.getItem('token');
-      await axios.delete(`http://localhost:5001/api/persons/${id}`, {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
-
+      await apiClient.delete(`/persons/${id}`);
       message.success('删除成功');
-      fetchPersons();
+      fetchPersons(paginationConfig.current, paginationConfig.pageSize);
     } catch (error) {
       console.error('删除失败:', error);
-      message.error('删除失败');
-      // 如果是认证错误，跳转到登录页面
-      if (error.response && error.response.status === 401) {
-        handleLogout();
+      if (error.response && error.response.status !== 401) {
+        message.error('删除失败');
       }
+      // 401 错误会在 axios 拦截器中处理
     }
   };
 
   // 批量删除
   const batchDelete = async () => {
     try {
-      const token = localStorage.getItem('token');
-      await axios.post('http://localhost:5001/api/persons/batch-delete', {
+      await apiClient.post('/persons/batch-delete', {
         ids: selectedRowKeys
-      }, {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
       });
 
       message.success('批量删除成功');
       setSelectedRowKeys([]);
-      fetchPersons();
+      fetchPersons(paginationConfig.current, paginationConfig.pageSize);
     } catch (error) {
       console.error('批量删除失败:', error);
-      message.error('批量删除失败');
-      // 如果是认证错误，跳转到登录页面
-      if (error.response && error.response.status === 401) {
-        handleLogout();
+      if (error.response && error.response.status !== 401) {
+        message.error('批量删除失败');
       }
+      // 401 错误会在 axios 拦截器中处理
     }
   };
 
@@ -410,8 +375,8 @@ const AdminPage = () => {
                 loading={loading}
                 pagination={{
                   ...paginationConfig,
-                  // 直接将onChange函数绑定到pagination对象中
                   onChange: handlePageChange,
+                  onShowSizeChange: handlePageChange,
                   showSizeChanger: true,
                   pageSizeOptions: ['10', '20', '50', '100'],
                   showTotal: (total, range) => `显示 ${range[0]}-${range[1]} 条，共 ${total} 条`

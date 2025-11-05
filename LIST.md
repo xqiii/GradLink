@@ -207,8 +207,8 @@ brew services start mongodb-community
 ## 部署方案
 
 ### 开发环境
-- 前端：Vite开发服务器（localhost:3000）
-- 后端：Node.js开发服务器（localhost:5000）
+- 前端：Vite开发服务器（localhost:3030）
+- 后端：Node.js开发服务器（localhost:5050）
 - 数据库：本地MongoDB
 
 ### 生产环境

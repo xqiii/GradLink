@@ -1,24 +1,42 @@
 #root {
+  width: 100%;
   max-width: 100%;
-  margin: 0 auto;
+  margin: 0;
   padding: 0;
-  text-align: center;
+  height: 100vh;
+  overflow: hidden;
 }
 
 /* 设置应用布局的浅色背景 */
 .app-layout {
+  width: 100% !important;
+  height: 100vh !important;
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 确保 Ant Design Layout 组件占满整个屏幕 */
+.ant-layout {
+  width: 100% !important;
+  min-width: 100% !important;
+}
+
+.ant-layout-content {
+  width: 100% !important;
+  max-width: 100% !important;
 }
 
 /* 修改header为简约蓝色背景并居中内容 */
 .app-header {
   background-color: #4A71C0 !important;
   color: white;
-  padding: 0 24px;
+  padding: 0 16px;
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 64px;
+  height: 48px; /* 减小 header 高度，给地图更多空间 */
+  flex-shrink: 0; /* 防止 header 被压缩 */
 }
 
 /* 调整logo样式使其居中显示 */
@@ -34,10 +52,16 @@
 
 /* 设置内容区域的背景 */
 .app-content {
+  width: 100%;
   background-color: #fff;
-  padding: 24px;
+  padding: 0;
   margin: 0;
-  min-height: calc(100vh - 64px);
+  min-height: calc(100vh - 48px); /* 对应新的 header 高度 */
+  height: calc(100vh - 48px); /* 对应新的 header 高度 */
+  overflow: hidden;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 .logo {
@@ -75,3 +99,22 @@
 .read-the-docs {
   color: #888;
 }
+
+/* 地图容器样式，确保canvas占满整个容器 */
+.map-spin-wrapper {
+  width: 100% !important;
+  height: 100% !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+.map-spin-wrapper > div {
+  width: 100% !important;
+  height: 100% !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  flex: 1 !important;
+}
+

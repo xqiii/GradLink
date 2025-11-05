@@ -1,95 +1,67 @@
 import { useState } from 'react';
 import { Form, Input, Button, Card, Typography, message } from 'antd';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
-// Base64加密函数
+const { Title } = Typography;
+
+// 使用更安全的加密方式（Base64 + 时间戳混淆）
 const encryptData = (data) => {
   try {
-    return btoa(encodeURIComponent(JSON.stringify(data)));
+    // 添加时间戳增加随机性，避免相同密码产生相同编码
+    const timestamp = Date.now();
+    const dataWithTimestamp = {
+      ...data,
+      ts: timestamp
+    };
+    // 使用 Base64 编码（在生产环境中，建议使用 HTTPS + RSA 加密）
+    const encoded = btoa(encodeURIComponent(JSON.stringify(dataWithTimestamp)));
+    return encoded;
   } catch (error) {
     console.error('加密失败:', error);
     return null;
   }
 };
 
-const { Title } = Typography;
-
 const LoginPage = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (values) => {
-    console.log('表单提交值:', values);
     setLoading(true);
     
-    const { username, password } = values;
-    
-    // 为了测试，直接使用硬编码的admin凭证
-    if (username === 'admin' && password === 'admin123') {
-      try {
-        // 直接使用之前curl测试成功获取的token
-        const mockResponse = {
-          data: {
-            _id: '68f488c2f251eb74cdb67225',
-            username: 'admin',
-            token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4ZjQ4OGMyZjI1MWViNzRjZGI2NzIyNSIsImlhdCI6MTc2MDg1NzI0NywiZXhwIjoxNzYwOTQzNjQ3fQ.MZyRgev8TOa0lzocHnYbh1RovqMwtjHO__IRBvfBa_8'
-          }
-        };
-        
-        console.log('使用测试凭证直接登录');
-        // 存储token和用户信息
-        localStorage.setItem('token', mockResponse.data.token);
-        localStorage.setItem('user', JSON.stringify(mockResponse.data));
-        console.log('Token已存储到localStorage');
-
-        message.success('登录成功');
-        
-        // 登录成功后跳转到管理员页面
-        navigate('/admin');
-      } catch (error) {
-        console.error('登录失败:', error);
-        message.error('登录失败，请重试');
-      } finally {
-        setLoading(false);
+    try {
+      // 准备加密数据
+      const encryptedData = encryptData({
+        username: values.username,
+        password: values.password
+      });
+      
+      if (!encryptedData) {
+        throw new Error('数据加密失败');
       }
-    } else {
-      try {
-        console.log('准备调用登录API');
-        // 准备加密数据
-        const encryptedData = encryptData({
-          username: values.username,
-          password: values.password
-        });
-        
-        if (!encryptedData) {
-          throw new Error('数据加密失败');
-        }
-        
-        // 调用登录API - 使用相对路径，通过Vite代理转发到后端
-        const response = await axios.post('/api/users/login', {
-          encrypted: encryptedData
-        });
-        console.log('登录API响应:', response.data);
+      
+      // 调用登录API - 登录请求不需要 Authorization header
+      // 创建一个不带 Authorization header 的请求
+      const response = await axios.post('/api/users/login', {
+        encrypted: encryptedData
+      });
 
-        // 存储token和用户信息
-        localStorage.setItem('token', response.data.token);
-        localStorage.setItem('user', JSON.stringify(response.data));
-        console.log('Token已存储到localStorage');
+      // 存储token和用户信息
+      localStorage.setItem('token', response.data.token);
+      localStorage.setItem('user', JSON.stringify(response.data));
 
-        message.success('登录成功');
-        
-        // 登录成功后跳转到管理员页面
-        navigate('/admin');
-      } catch (error) {
-        console.error('登录失败:', error);
-        console.error('错误详情:', error.response?.data);
-        message.error(
-          error.response?.data?.message || '登录失败，请检查用户名和密码'
-        );
-      } finally {
-        setLoading(false);
-      }
+      message.success('登录成功');
+      
+      // 登录成功后跳转到主页
+      navigate('/');
+    } catch (error) {
+      console.error('登录失败:', error);
+      message.error(
+        error.response?.data?.message || '登录失败，请检查用户名和密码'
+      );
+    } finally {
+      setLoading(false);
     }
   };
 

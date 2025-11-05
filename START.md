@@ -35,7 +35,7 @@ npm install
 
 ### 3. 配置环境变量
 
-确保在项目根目录有 `.env` 文件，内容如下：
+确保在**项目根目录**创建 `.env` 文件，内容如下：
 
 ```
 # 开发环境配置
@@ -43,20 +43,25 @@ NODE_ENV=development
 
 # 数据库连接信息 (使用认证)
 MONGO_URI=mongodb://admin:password@localhost:27017/link-map-dev?authSource=admin
-MONGO_USER=admin
-MONGO_PASSWORD=password
-MONGO_DBNAME=link-map-dev
 
-# JWT密钥
+# JWT密钥（建议使用复杂随机字符串）
 JWT_SECRET=your_jwt_secret_key_for_development
 
-# 服务器配置
-SERVER_PORT=5001
+# JWT过期时间（可选）
+JWT_EXPIRES_IN=24h
+
+# 服务器配置（可选，不设置则使用默认值）
+SERVER_PORT=5050
 SERVER_HOST=localhost
 
-# 前端配置
-FRONTEND_URL=http://localhost:3000
+# 前端URL（可选，多个URL用逗号分隔）
+FRONTEND_URL=http://localhost:3030
 ```
+
+**注意**：
+- `.env` 文件已添加到 `.gitignore`，不会被提交到 Git
+- `MONGO_URI` 和 `JWT_SECRET` 是重要配置项，建议设置
+- 其他配置项有默认值，可以不设置
 
 ### 4. 启动MongoDB服务
 
@@ -118,7 +123,7 @@ npm run dev  # 使用nodemon启动开发服务器
 npm start    # 直接启动服务器
 ```
 
-后端服务将运行在 `http://localhost:5000`
+后端服务将运行在 `http://localhost:5050`
 
 ### 启动前端服务
 
@@ -127,14 +132,14 @@ cd frontend
 npm run dev
 ```
 
-前端服务将运行在 `http://localhost:3000`
+前端服务将运行在 `http://localhost:3030`
 
 ## 初始化管理员账户
 
 在首次运行时，你需要创建一个管理员账户。你可以通过API调用来完成：
 
 ```bash
-curl -X POST http://localhost:5001/api/users/register \
+curl -X POST http://localhost:5050/api/users/register \
   -H "Content-Type: application/json" \
   -d '{"username":"admin","password":"admin123"}'
 ```
@@ -143,9 +148,9 @@ curl -X POST http://localhost:5001/api/users/register \
 
 ## 访问应用
 
-- **地图展示页面**：http://localhost:3000/
-- **管理员登录页面**：http://localhost:3000/login
-- **管理员后台**：http://localhost:3000/admin (登录后访问)
+- **地图展示页面**：http://localhost:3030/
+- **管理员登录页面**：http://localhost:3030/login
+- **管理员后台**：http://localhost:3030/admin (登录后访问)
 
 ## 项目结构说明
 
