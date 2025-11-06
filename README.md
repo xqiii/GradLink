@@ -22,6 +22,18 @@
 
 ---
 
+## 📸 项目预览
+
+<div align="center">
+
+![项目预览](assets/map-preview.png)
+
+*中国地区毕业同学分布地图可视化界面*
+
+</div>
+
+---
+
 ## ✨ 功能特性
 
 - 🗺️ **交互式地图可视化** - 基于 ECharts 的中国地图，支持缩放、平移和省份点击
@@ -158,6 +170,7 @@ link-map/
 │   ├── development/       # 开发环境配置
 │   └── production/       # 生产环境配置
 │
+├── assets/                # 项目资源文件（图片等）
 ├── docs/                  # 项目文档
 ├── LICENSE                # MIT 许可证
 ├── README.md              # 项目说明文档

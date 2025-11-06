@@ -104,7 +104,7 @@ const MapPage = () => {
       tooltip: {
         trigger: 'item',
         backgroundColor: 'rgba(255, 255, 255, 0.98)',
-        borderColor: '#4A71C0',
+        borderColor: '#d9d9d9', // 浅灰色边框
         borderWidth: 2,
         borderRadius: 8,
         padding: [12, 16],
@@ -159,7 +159,7 @@ const MapPage = () => {
           fontWeight: 500,
           color: '#666'
         },
-        borderColor: '#4A71C0',
+        borderColor: '#d9d9d9', // 浅灰色边框
         borderWidth: 1,
         itemGap: 5,
         padding: [10, 5]
@@ -188,12 +188,12 @@ const MapPage = () => {
           // 添加地图边框样式 - 更生动的视觉效果
           itemStyle: {
             areaColor: '#e6f7ff',
-            borderColor: '#4A71C0',
-            borderWidth: 1.5,
-            shadowBlur: 10,
-            shadowColor: 'rgba(74, 113, 192, 0.3)',
-            shadowOffsetX: 2,
-            shadowOffsetY: 2
+            borderColor: '#8c8c8c', // 更明显的灰色边框，便于区分各个地区
+            borderWidth: 2, // 增加边框宽度，使边界更清晰
+            shadowBlur: 8,
+            shadowColor: 'rgba(140, 140, 140, 0.4)', // 对应的灰色阴影
+            shadowOffsetX: 1,
+            shadowOffsetY: 1
           },
           // 鼠标悬停效果 - 更醒目的高亮
           emphasis: {
@@ -202,15 +202,15 @@ const MapPage = () => {
               fontSize: 14,
               fontWeight: 'bold',
               color: '#fff',
-              textBorderColor: '#4A71C0',
+              textBorderColor: '#595959', // 更深的灰色，增强对比
               textBorderWidth: 3
             },
             itemStyle: {
               areaColor: '#4A71C0',
-              borderColor: '#1d4ed8',
-              borderWidth: 2,
+              borderColor: '#595959', // 更明显的灰色边框
+              borderWidth: 2.5, // 悬停时边框更粗
               shadowBlur: 30,
-              shadowColor: 'rgba(74, 113, 192, 0.6)',
+              shadowColor: 'rgba(89, 89, 89, 0.6)', // 对应的灰色阴影
               shadowOffsetX: 0,
               shadowOffsetY: 0
             }
@@ -223,13 +223,13 @@ const MapPage = () => {
             label: {
               show: true,
               fontSize: 14,
-              fontWeight: 'bold',
+              fontWeight: 'normal', // 不使用加粗，保持清晰可读
               color: '#fff'
             },
             itemStyle: {
               areaColor: '#2563eb',
-              borderColor: '#1e40af',
-              borderWidth: 2
+              borderColor: '#595959', // 更明显的灰色边框
+              borderWidth: 2.5 // 选中时边框更粗
             }
           },
           data: mapData.map(item => ({
@@ -267,6 +267,22 @@ const MapPage = () => {
 
   // 处理省份点击事件
   const handleProvinceClick = async (params) => {
+    // 先取消之前选中的省份
+    if (chartInstance.current && selectedProvince) {
+      chartInstance.current.dispatchAction({
+        type: 'unselect',
+        name: selectedProvince
+      });
+    }
+    
+    // 选中当前点击的省份
+    if (chartInstance.current) {
+      chartInstance.current.dispatchAction({
+        type: 'select',
+        name: params.name
+      });
+    }
+    
     setSelectedProvince(params.name);
     setLoading(true);
     
@@ -358,10 +374,28 @@ const MapPage = () => {
       <Modal
         title={`${selectedProvince || ''} 人员信息`}
         open={provinceModalVisible}
-        onCancel={() => setProvinceModalVisible(false)}
+        onCancel={() => {
+          setProvinceModalVisible(false);
+          // 关闭弹窗时取消地图选中状态
+          if (chartInstance.current && selectedProvince) {
+            chartInstance.current.dispatchAction({
+              type: 'unselect',
+              name: selectedProvince
+            });
+          }
+        }}
         width={600}
         footer={[
-          <Button key="close" onClick={() => setProvinceModalVisible(false)}>
+          <Button key="close" onClick={() => {
+            setProvinceModalVisible(false);
+            // 关闭弹窗时取消地图选中状态
+            if (chartInstance.current && selectedProvince) {
+              chartInstance.current.dispatchAction({
+                type: 'unselect',
+                name: selectedProvince
+              });
+            }
+          }}>
             关闭
           </Button>
         ]}
