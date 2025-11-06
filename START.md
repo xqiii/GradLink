@@ -19,14 +19,25 @@ cd link-map
 
 ### 2. 安装依赖
 
-#### 后端依赖
+#### 方式一：统一安装（推荐）
+
+```bash
+# 在项目根目录执行
+npm run install:all
+```
+
+这会自动安装根目录、后端和前端的依赖。
+
+#### 方式二：分别安装
+
+**后端依赖：**
 
 ```bash
 cd backend
 npm install
 ```
 
-#### 前端依赖
+**前端依赖：**
 
 ```bash
 cd ../frontend
@@ -114,9 +125,41 @@ mongod --auth
 
 ## 运行项目
 
-### 启动后端服务
+### 方式一：统一启动（推荐）✨
+
+**使用 npm 脚本：**
 
 ```bash
+# 在项目根目录执行，同时启动前后端
+npm start
+
+# 或使用开发模式（支持热重载）
+npm run dev
+```
+
+**使用启动脚本：**
+
+```bash
+# Linux/macOS
+./start.sh
+
+# Windows
+start.bat
+```
+
+**服务地址：**
+- 后端服务：`http://localhost:5050`
+- 前端应用：`http://localhost:5173`
+
+### 方式二：分别启动
+
+#### 启动后端服务
+
+```bash
+# 方式1：使用 npm 脚本
+npm run start:backend
+
+# 方式2：直接进入目录
 cd backend
 npm run dev  # 使用nodemon启动开发服务器
 # 或者
@@ -125,7 +168,7 @@ npm start    # 直接启动服务器
 
 后端服务将运行在 `http://localhost:5050`
 
-### 启动前端服务
+#### 启动前端服务
 
 ```bash
 cd frontend
