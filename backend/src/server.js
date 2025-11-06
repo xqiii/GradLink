@@ -32,6 +32,16 @@ app.get('/', (req, res) => {
   res.json({ message: '中国地图数据可视化应用后端API' });
 });
 
+// 健康检查端点
+app.get('/api/health', (req, res) => {
+  const dbStatus = mongoose.connection.readyState === 1 ? 'connected' : 'disconnected';
+  res.json({
+    status: 'ok',
+    timestamp: new Date().toISOString(),
+    database: dbStatus
+  });
+});
+
 // 数据库连接
 async function connectDatabase() {
   try {
