@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { Spin, Card, List, Modal, message, Button } from 'antd';
+import { Spin, Card, List, Modal, message, Button, Avatar } from 'antd';
 import * as echarts from 'echarts';
 import apiClient from '../utils/axios';
 
@@ -407,6 +407,7 @@ const MapPage = () => {
             renderItem={person => (
               <List.Item key={person._id}>
                 <Meta
+                  avatar={<Avatar src={`https://api.dicebear.com/9.x/glass/svg?seed=Brian`} />}
                   title={person.name}
                   description={
                     <div>

@@ -34,13 +34,17 @@ echo 正在启动服务...
 echo.
 
 REM 使用 concurrently 启动
-if exist "node_modules\concurrently" (
-    call npx concurrently --names "后端,前端" --prefix-colors "blue,green" "cd backend && npm start" "cd frontend && npm run dev"
-) else (
+if not exist "node_modules" (
+    echo 正在安装依赖...
+    call npm install
+)
+
+if not exist "node_modules\concurrently" (
     echo 正在安装 concurrently...
     call npm install concurrently --save-dev
-    call npx concurrently --names "后端,前端" --prefix-colors "blue,green" "cd backend && npm start" "cd frontend && npm run dev"
 )
+
+call npx concurrently --names "后端,前端" --prefix-colors "blue,green" "cd backend && npm start" "cd frontend && npm run dev"
 
 pause
 

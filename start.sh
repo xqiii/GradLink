@@ -44,8 +44,14 @@ echo ""
 # 启动后端和前端
 cd "$(dirname "$0")"
 
-# 使用 concurrently 启动（如果已安装）
+# 使用 concurrently 启动
 if command -v npx &> /dev/null; then
+    # 确保 concurrently 已安装
+    if [ ! -d "node_modules/concurrently" ]; then
+        echo -e "${YELLOW}正在安装 concurrently...${NC}"
+        npm install concurrently --save-dev
+    fi
+    
     npx concurrently \
         --names "后端,前端" \
         --prefix-colors "blue,green" \
