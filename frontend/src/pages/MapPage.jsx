@@ -307,33 +307,10 @@ const MapPage = () => {
   };
 
   return (
-    <div style={{ 
-      padding: 0, 
-      margin: 0,
-      width: '100%', 
-      height: '100%',
-      flex: 1,
-      position: 'relative',
-      overflow: 'hidden',
-      display: 'flex',
-      flexDirection: 'column',
-      background: 'linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)'
-    }}>
+    <div className="p-0 m-0 w-full h-full flex-1 relative overflow-hidden flex flex-col bg-gradient-to-br from-[#f5f7fa] to-[#c3cfe2]">
       {/* 地图容器，占满整个空间 */}
       <Card 
-        style={{ 
-          width: '100%', 
-          height: '100%',
-          border: 'none', 
-          boxShadow: 'none',
-          borderRadius: 0,
-          padding: 0,
-          margin: 0,
-          display: 'flex',
-          flexDirection: 'column',
-          backgroundColor: 'transparent',
-          overflow: 'hidden'
-        }}
+        className="w-full h-full border-0 shadow-none rounded-none p-0 m-0 flex flex-col bg-transparent overflow-hidden"
         bodyStyle={{
           padding: 0,
           margin: 0,
@@ -347,25 +324,12 @@ const MapPage = () => {
         <Spin 
           spinning={loading} 
           tip="加载地图中..." 
-          style={{ 
-            width: '100%',
-            height: '100%',
-            flex: 1,
-            display: 'flex',
-            flexDirection: 'column'
-          }}
+          className="w-full h-full flex-1 flex flex-col"
           wrapperClassName="map-spin-wrapper"
         >
           <div 
             ref={mapRef} 
-            style={{ 
-              width: '100%', 
-              height: '100%',
-              flex: 1,
-              padding: 0,
-              margin: 0,
-              boxSizing: 'border-box'
-            }}
+            className="w-full h-full flex-1 p-0 m-0 box-border"
           />
         </Spin>
       </Card>

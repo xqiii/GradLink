@@ -281,17 +281,10 @@ const AdminPage = () => {
   };
 
   return (
-    <Layout style={{ minHeight: '100vh', background: '#f0f2f5' }}>
-      <Header style={{ 
-        display: 'flex', 
-        justifyContent: 'space-between', 
-        alignItems: 'center',
-        padding: '0 24px',
-        boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
-        height: '64px'
-      }}>
+    <Layout className="min-h-screen bg-[#f0f2f5]">
+      <Header className="flex justify-between items-center px-6 shadow-md h-16">
         <div>
-          <Title level={4} style={{ color: '#fff', margin: 0, fontSize: '18px', fontWeight: 600 }}>Link Map 管理系统</Title>
+          <Title level={4} className="text-white m-0 text-lg font-semibold">Link Map 管理系统</Title>
         </div>
         <Button 
           type="primary" 
@@ -307,7 +300,7 @@ const AdminPage = () => {
         <Sider 
           width={180} 
           theme="dark"
-          style={{ boxShadow: '2px 0 6px rgba(0,21,41,0.3)' }}
+          className="shadow-[2px_0_6px_rgba(0,21,41,0.3)]"
           breakpoint="lg"
           collapsedWidth={0}
         >
@@ -315,7 +308,7 @@ const AdminPage = () => {
               mode="inline"
               selectedKeys={[activeKey]}
               onClick={({ key }) => setActiveKey(key)}
-              style={{ height: '100%', borderRight: 0, paddingTop: '16px' }}
+              className="h-full border-r-0 pt-4"
               items={[
                 { 
                   key: 'data', 
@@ -326,15 +319,10 @@ const AdminPage = () => {
             />
           {/* 注意：已将Menu.Item子组件替换为items属性数组 */}
         </Sider>
-        <Layout style={{ padding: '15px 20px', minWidth: '900px' }}>
-            <Content style={{ maxWidth: '1600px', margin: '0 auto', width: '100%' }}>
-              <Card style={{ borderRadius: '8px' }}>
-              <div style={{ 
-                  marginBottom: '20px', 
-                  display: 'flex', 
-                  alignItems: 'center',
-                  justifyContent: 'space-between'
-                }}>
+        <Layout className="p-[15px_20px] min-w-[900px]">
+            <Content className="max-w-[1600px] mx-auto w-full">
+              <Card className="rounded-lg">
+              <div className="mb-5 flex items-center justify-between">
                   <div>
                     <Button 
                       type="primary" 
@@ -347,7 +335,7 @@ const AdminPage = () => {
                     {selectedRowKeys.length > 0 && (
                       <Button 
                         danger 
-                        style={{ marginLeft: '12px' }} 
+                        className="ml-3" 
                         onClick={batchDelete}
                         size="middle"
                       >
@@ -355,7 +343,7 @@ const AdminPage = () => {
                       </Button>
                     )}
                   </div>
-                  <div style={{ fontSize: '14px', color: '#666' }}>
+                  <div className="text-sm text-gray-600">
                     共 {paginationConfig.total} 条数据
                   </div>
                 </div>
@@ -381,10 +369,8 @@ const AdminPage = () => {
                   pageSizeOptions: ['10', '20', '50', '100'],
                   showTotal: (total, range) => `显示 ${range[0]}-${range[1]} 条，共 ${total} 条`
                 }}
-                style={{ 
-                  width: '100%', 
-                  tableLayout: 'fixed'
-                }}
+                className="w-full"
+                style={{ tableLayout: 'fixed' }}
                 scroll={{ x: 'max-content' }}
                 size="middle"
                 rowClassName={(record, index) => index % 2 === 0 ? 'table-row-even' : ''}
@@ -473,7 +459,7 @@ const AdminPage = () => {
           </Form.Item>
 
           <Form.Item>
-            <Button type="primary" htmlType="submit" style={{ width: '100%' }}>
+            <Button type="primary" htmlType="submit" className="w-full">
               {isEditMode ? '更新' : '添加'}
             </Button>
           </Form.Item>

@@ -66,16 +66,10 @@ const LoginPage = () => {
   };
 
   return (
-    <div style={{ 
-      display: 'flex', 
-      justifyContent: 'center', 
-      alignItems: 'center', 
-      minHeight: '80vh',
-      padding: '20px'
-    }}>
+    <div className="flex justify-center items-center min-h-[80vh] p-5">
       <Card 
-        title={<Title level={4} style={{ margin: 0 }}>管理员登录</Title>} 
-        style={{ width: '100%', maxWidth: 400 }}
+        title={<Title level={4} className="m-0">管理员登录</Title>} 
+        className="w-full max-w-[400px]"
       >
         <Form
           name="login"
@@ -102,7 +96,7 @@ const LoginPage = () => {
             <Button 
               type="primary" 
               htmlType="submit" 
-              style={{ width: '100%' }}
+              className="w-full"
               loading={loading}
             >
               登录
