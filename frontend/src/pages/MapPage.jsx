@@ -1,9 +1,8 @@
 import { useState, useEffect, useRef } from 'react';
-import { Spin, Card, List, Modal, message, Button, Avatar } from 'antd';
+import { Spin, Card, List, Modal, message, Button, Avatar, Tag, Empty } from 'antd';
+import { UserOutlined, WechatOutlined, EnvironmentOutlined, CloseOutlined } from '@ant-design/icons';
 import * as echarts from 'echarts';
 import apiClient from '../utils/axios';
-
-const { Meta } = Card;
 
 const MapPage = () => {
   const mapRef = useRef(null);
@@ -336,7 +335,15 @@ const MapPage = () => {
 
       {/* 省份人员信息弹窗 */}
       <Modal
-        title={`${selectedProvince || ''} 人员信息`}
+        title={
+          <div className="flex items-center gap-2">
+            <EnvironmentOutlined className="text-[#4A71C0]" />
+            <span className="text-lg font-semibold">{selectedProvince || ''} 人员信息</span>
+            <Tag color="blue" className="ml-2">
+              共 {provincePersons.length} 人
+            </Tag>
+          </div>
+        }
         open={provinceModalVisible}
         onCancel={() => {
           setProvinceModalVisible(false);
@@ -348,42 +355,86 @@ const MapPage = () => {
             });
           }
         }}
-        width={600}
+        width={700}
+        className="person-modal"
         footer={[
-          <Button key="close" onClick={() => {
-            setProvinceModalVisible(false);
-            // 关闭弹窗时取消地图选中状态
-            if (chartInstance.current && selectedProvince) {
-              chartInstance.current.dispatchAction({
-                type: 'unselect',
-                name: selectedProvince
-              });
-            }
-          }}>
+          <Button 
+            key="close" 
+            type="primary"
+            icon={<CloseOutlined />}
+            onClick={() => {
+              setProvinceModalVisible(false);
+              // 关闭弹窗时取消地图选中状态
+              if (chartInstance.current && selectedProvince) {
+                chartInstance.current.dispatchAction({
+                  type: 'unselect',
+                  name: selectedProvince
+                });
+              }
+            }}
+            className="px-6"
+          >
             关闭
           </Button>
         ]}
       >
         <Spin spinning={loading}>
-          <List
-            bordered
-            dataSource={provincePersons}
-            renderItem={person => (
-              <List.Item key={person._id}>
-                <Meta
-                  avatar={<Avatar src={`https://api.dicebear.com/9.x/glass/svg?seed=Brian`} />}
-                  title={person.name}
-                  description={
-                    <div>
-                      <p>微信：{person.wechat}</p>
-                      <p>城市：{person.city || '未知'}</p>
+          {provincePersons.length === 0 && !loading ? (
+            <Empty
+              description="暂无人员数据"
+              className="py-12"
+              image={Empty.PRESENTED_IMAGE_SIMPLE}
+            />
+          ) : (
+            <List
+              dataSource={provincePersons}
+              className="person-list"
+              renderItem={(person, index) => (
+                <List.Item 
+                  key={person._id}
+                  className="!px-4 !py-3 hover:bg-gray-50 transition-colors duration-200 rounded-lg mb-2 border border-gray-100 shadow-sm hover:shadow-md"
+                >
+                  <div className="flex items-start w-full gap-4">
+                    {/* 头像 */}
+                    <Avatar 
+                      size={56}
+                      src={`https://api.dicebear.com/9.x/avataaars/svg?seed=${person.name}`}
+                      icon={<UserOutlined />}
+                      className="flex-shrink-0 border-2 border-[#4A71C0]/20"
+                    />
+                    
+                    {/* 信息区域 */}
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 mb-2">
+                        <h3 className="text-lg font-semibold text-gray-800 m-0">
+                          {person.name}
+                        </h3>
+                        <Tag color="blue" className="text-xs">
+                          #{index + 1}
+                        </Tag>
+                      </div>
+                      
+                      <div className="space-y-2">
+                        <div className="flex items-center gap-2 text-gray-600">
+                          <WechatOutlined className="text-green-500" />
+                          <span className="text-sm font-medium">微信：</span>
+                          <span className="text-sm">{person.wechat}</span>
+                        </div>
+                        
+                        <div className="flex items-center gap-2 text-gray-600">
+                          <EnvironmentOutlined className="text-blue-500" />
+                          <span className="text-sm font-medium">城市：</span>
+                          <Tag color="geekblue" className="m-0">
+                            {person.city || '未知'}
+                          </Tag>
+                        </div>
+                      </div>
                     </div>
-                  }
-                />
-              </List.Item>
-            )}
-            locale={{ emptyText: '暂无人员数据' }}
-          />
+                  </div>
+                </List.Item>
+              )}
+            />
+          )}
         </Spin>
       </Modal>
     </div>
