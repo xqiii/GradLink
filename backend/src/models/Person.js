@@ -25,9 +25,19 @@ const PersonSchema = new mongoose.Schema({
   },
   phone: {
     type: String,
-    required: true,
+    required: false,
     trim: true,
-    match: /^1[3-9]\d{9}$/
+    validate: {
+      validator: function(v) {
+        // 如果 phone 为空或未定义，则验证通过
+        if (!v || v === '') {
+          return true;
+        }
+        // 如果 phone 有值，则验证格式
+        return /^1[3-9]\d{9}$/.test(v);
+      },
+      message: '手机号格式不正确，请输入11位有效手机号'
+    }
   },
   location: {
     type: {

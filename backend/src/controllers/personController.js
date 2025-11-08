@@ -136,8 +136,8 @@ const updatePerson = async (req, res) => {
     const { name, province, city, wechat, location, phone } = req.body;
     
     // 验证必填字段
-    if (!name || !province || !wechat || !phone) {
-      return res.status(400).json({ message: '姓名、省份、微信号和手机号为必填字段' });
+    if (!name || !province || !wechat) {
+      return res.status(400).json({ message: '姓名、省份和微信号为必填字段' });
     }
     
     // 查找并更新

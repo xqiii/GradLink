@@ -2,6 +2,8 @@
 
 <div align="center">
 
+<img src="frontend/public/logo.svg" alt="GradLink Logo" width="120" height="120" />
+
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 ![Node](https://img.shields.io/badge/node-%3E%3D16.0.0-brightgreen.svg)
 ![React](https://img.shields.io/badge/react-18.0-blue.svg)

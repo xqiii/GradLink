@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <defs>
+    <linearGradient id="mapGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1890ff;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#096dd9;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="linkGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#40a9ff;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1890ff;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- 背景圆形 -->
+  <circle cx="100" cy="100" r="95" fill="url(#mapGradient)" opacity="0.1"/>
+  
+  <!-- 简化的中国地图轮廓（抽象化设计） -->
+  <path d="M 60 80 Q 50 70, 60 60 Q 70 50, 80 55 Q 90 60, 100 55 Q 110 50, 120 55 Q 130 60, 140 55 Q 150 50, 160 60 Q 170 70, 160 80 Q 150 90, 140 100 Q 130 110, 120 115 Q 110 120, 100 125 Q 90 120, 80 115 Q 70 110, 60 100 Z" 
+        fill="url(#mapGradient)" 
+        stroke="#1890ff" 
+        stroke-width="2" 
+        opacity="0.8"/>
+  
+  <!-- 连接节点 -->
+  <circle cx="80" cy="90" r="6" fill="#ff4d4f" opacity="0.9"/>
+  <circle cx="120" cy="85" r="6" fill="#fa8c16" opacity="0.9"/>
+  <circle cx="100" cy="110" r="6" fill="#52c41a" opacity="0.9"/>
+  <circle cx="70" cy="75" r="5" fill="#40a9ff" opacity="0.9"/>
+  <circle cx="130" cy="70" r="5" fill="#40a9ff" opacity="0.9"/>
+  
+  <!-- 连接线 -->
+  <line x1="80" y1="90" x2="100" y2="110" stroke="url(#linkGradient)" stroke-width="2" opacity="0.6" stroke-linecap="round"/>
+  <line x1="120" y1="85" x2="100" y2="110" stroke="url(#linkGradient)" stroke-width="2" opacity="0.6" stroke-linecap="round"/>
+  <line x1="70" y1="75" x2="80" y2="90" stroke="url(#linkGradient)" stroke-width="2" opacity="0.6" stroke-linecap="round"/>
+  <line x1="130" y1="70" x2="120" y2="85" stroke="url(#linkGradient)" stroke-width="2" opacity="0.6" stroke-linecap="round"/>
+  <line x1="80" y1="90" x2="120" y2="85" stroke="url(#linkGradient)" stroke-width="1.5" opacity="0.4" stroke-linecap="round"/>
+</svg>

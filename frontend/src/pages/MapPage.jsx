@@ -398,7 +398,7 @@ const MapPage = () => {
                     {/* 头像 */}
                     <Avatar 
                       size={56}
-                      src={`https://api.dicebear.com/9.x/avataaars/svg?seed=${person.name}`}
+                      src={`https://api.dicebear.com/9.x/avataaars-neutral/svg?seed=${person.name}`}
                       icon={<UserOutlined />}
                       className="flex-shrink-0 border-2 border-[#4A71C0]/20"
                     />

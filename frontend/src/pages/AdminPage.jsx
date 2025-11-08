@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Layout, Menu, Typography, Card, Table, Button, Modal, Form, Input, message, Select } from 'antd';
-import { PlusOutlined, EditOutlined, DeleteOutlined, LogoutOutlined, TableOutlined } from '@ant-design/icons';
+import { PlusOutlined, EditOutlined, DeleteOutlined, LogoutOutlined, TableOutlined, HomeOutlined } from '@ant-design/icons';
 import apiClient from '../utils/axios';
 import { useNavigate } from 'react-router-dom';
 
@@ -286,15 +286,26 @@ const AdminPage = () => {
         <div>
           <Title level={4} className="text-white m-0 text-lg font-semibold">Link Map 管理系统</Title>
         </div>
-        <Button 
-          type="primary" 
-          danger 
-          icon={<LogoutOutlined />} 
-          onClick={handleLogout}
-          size="middle"
-        >
-          退出登录
-        </Button>
+        <div className="flex items-center gap-3">
+          <Button 
+            type="default"
+            icon={<HomeOutlined />} 
+            onClick={() => navigate('/')}
+            size="middle"
+            className="bg-white/10 border-white/20 text-white hover:bg-white/20"
+          >
+            返回主页
+          </Button>
+          <Button 
+            type="primary" 
+            danger 
+            icon={<LogoutOutlined />} 
+            onClick={handleLogout}
+            size="middle"
+          >
+            退出登录
+          </Button>
+        </div>
       </Header>
       <Layout>
         <Sider 
