@@ -1,9 +1,20 @@
 import axios from 'axios';
 import { message } from 'antd';
 
+// 获取 API 基础 URL
+// 开发环境使用代理（相对路径），生产环境使用环境变量配置的完整 URL
+const getBaseURL = () => {
+  // 如果设置了 VITE_API_BASE_URL 且不在开发环境，使用环境变量
+  if (import.meta.env.VITE_API_BASE_URL && import.meta.env.MODE === 'production') {
+    return import.meta.env.VITE_API_BASE_URL + '/api';
+  }
+  // 开发环境使用代理
+  return '/api';
+};
+
 // 创建 axios 实例
 const apiClient = axios.create({
-  baseURL: '/api', // 使用相对路径，通过 Vite 代理转发
+  baseURL: getBaseURL(),
   timeout: 10000,
   headers: {
     'Content-Type': 'application/json'

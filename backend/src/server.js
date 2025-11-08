@@ -4,12 +4,28 @@ const cors = require('cors');
 const dotenv = require('dotenv');
 const path = require('path');
 
-// 加载环境变量
-dotenv.config();
+// 加载环境变量 - 从项目根目录加载 .env 文件
+// __dirname 是 backend/src，所以需要回到项目根目录（../../）
+const envPath = path.resolve(__dirname, '../../.env');
+const result = dotenv.config({ path: envPath });
+
+// 调试信息：检查环境变量是否加载成功
+if (result.error) {
+  console.warn('警告：无法加载 .env 文件:', result.error.message);
+  console.warn('尝试加载的路径:', envPath);
+} else {
+  console.log('✓ 环境变量加载成功');
+  console.log('SERVER_PORT:', process.env.SERVER_PORT);
+  console.log('NODE_ENV:', process.env.NODE_ENV);
+}
 
 // 加载配置
 const env = process.env.NODE_ENV || 'development';
 const config = require(`../../config/${env}/config`);
+
+// 调试信息：显示最终使用的配置
+console.log('最终配置 - 端口:', config.server.port);
+console.log('最终配置 - 主机:', config.server.host);
 
 // 初始化Express应用
 const app = express();

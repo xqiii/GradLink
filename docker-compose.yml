@@ -32,14 +32,14 @@ services:
     restart: unless-stopped
     environment:
       NODE_ENV: production
-      SERVER_PORT: 5050
-      SERVER_HOST: 0.0.0.0
+      SERVER_PORT: ${SERVER_PORT:-5050}
+      SERVER_HOST: ${SERVER_HOST:-0.0.0.0}
       MONGO_URI: mongodb://${MONGO_ROOT_USERNAME:-admin}:${MONGO_ROOT_PASSWORD:-password}@mongodb:27017/${MONGO_DATABASE:-link-map}?authSource=admin
       JWT_SECRET: ${JWT_SECRET}
       JWT_EXPIRES_IN: ${JWT_EXPIRES_IN:-24h}
       FRONTEND_URL: ${FRONTEND_URL:-http://localhost:80}
     ports:
-      - "${BACKEND_PORT:-5050}:5050"
+      - "${BACKEND_PORT:-5050}:${SERVER_PORT:-5050}"
     depends_on:
       mongodb:
         condition: service_healthy
@@ -58,7 +58,7 @@ services:
       context: ./frontend
       dockerfile: Dockerfile
       args:
-        - VITE_API_URL=${VITE_API_URL:-http://localhost:5050}
+        - VITE_API_BASE_URL=${VITE_API_BASE_URL:-http://localhost:5050}
     container_name: link-map-frontend
     restart: unless-stopped
     ports:

@@ -14,6 +14,12 @@ RUN npm ci
 # 复制源代码
 COPY . .
 
+# 构建参数：API 基础 URL（从 docker-compose.yml 传入）
+ARG VITE_API_BASE_URL=http://localhost:5050
+
+# 设置环境变量（Vite 构建时需要）
+ENV VITE_API_BASE_URL=$VITE_API_BASE_URL
+
 # 构建应用
 RUN npm run build
 
