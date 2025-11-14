@@ -29,6 +29,9 @@
 <div align="center">
 
 ![项目预览](assets/map-preview.png)
+![](assets/detail.png)
+![](assets/login.png)
+![](assets/admin.png)
 
 *中国地区毕业同学分布地图可视化界面*
 
